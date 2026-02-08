@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>kkkkkkk</title>  
+  <style>
+    :root {
+      --bg: #000;
+      --neon: #00ff66;
+      --text: #f0f0f0;
+      --muted: rgba(240,240,240,0.55);
+      --danger: rgba(0,255,102,0.25);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    html { scroll-snap-type: y mandatory; }
+
+    body { background: var(--bg); color: var(--text); }
+
+    header, section, footer { 
+      scroll-snap-align: 
+        start; 
+    }
+
+    header {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    header h1 { color: var(--neon); font-size: 2.1rem; margin-bottom: 16px; }
+    header p { color: var(--muted); font-size: 1rem; line-height: 1.5; }
+
+    section {
+      min-height: 100vh;
+      padding: 32px 24px 140px;
+      display: flex;
+      align-items: center;
+      position: relative;
+    }
+
+    section.anchor::before {
+      content: 'Mais escolhido';
+      position: absolute;
+      top: 18px;
+      right: 24px;
+      font-size: 0.75rem;
+      color: var(--neon);
+      opacity: 0.7;
+    }
+
+    .product h2 { 
+      color: var(--neon); 
+      font-size: 1.8rem; 
+      margin-bottom: 12px; 
+    }
+    .product p { 
+      color: var(--muted); 
+      font-size: 0.95rem; 
+      line-height: 1.5; 
+      margin-bottom: 20px; 
+    }
+    .price { 
+      font-size: 1.5rem; 
+      color: var(--neon); 
+      margin-bottom: 12px; 
+    }
+
+    .urgency {
+      font-size: 0.8rem;
+      color: var(--muted);
+      border-left: 2px solid var(--danger);
+      padding-left: 10px;
+      margin-bottom: 24px;
+    }
+
+    .cta-fixed {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      padding: 18px;
+      background: #000;
+      border-top: 1px solid rgba(0,255,102,0.35);
+      z-index: 10;
+    }
+
+    .cta-fixed a {
+      display: block;
+      width: 100%;
+      text-align: center;
+      padding: 16px;
+      border: 1px solid var(--neon);
+      color: var(--neon);
+      text-decoration: none;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .cta-fixed a:active { 
+      background: var(--neon);
+      color: #000; 
+    }
+
+    footer { 
+      padding: 40px 20px 140px; 
+      text-align: center; 
+      font-size: 0.75rem; 
+      opacity: 0.4; 
+    }
+
+    .hidden { 
+      opacity: 0; 
+      transform: translateY(20px); 
+      transition: 0.4s ease; 
+    }
+    .show { 
+      opacity: 1; 
+      transform: translateY(0); 
+    }
+  </style>
+</head>
+<body>  
+  <header class="hidden">
+    <h1>Produtos</h1>
+    <p>kkkkkkkk</p>
+  </header>  
+  
+  <div id="produtos"></div>  
+  
+  <footer>© 2026 | kkkkkkkkkk</footer>  
+  
+  <div class="cta-fixed">
+    <a id="ctaLink" href="#" target="_blank">Discord</a>
+  </div>  
+  <script>
+    const products = [
+      {
+        name: 'Produto Alpha',
+        desc: 'Entrada rápida.',
+        price: 'R$ 49,90',
+        urgency: 'Vagas rotativas. Pode fechar sem aviso.',
+        link: 'https://discord.gg/seulink1'
+      },
+      {
+        name: 'Produto Beta',
+        desc: 'Equilíbrio entre preço e acesso.',
+        price: 'R$ 79,90',
+        urgency: 'Acesso limitado por ciclo.',
+        link: 'https://discord.gg/seulink2',
+        anchor: true
+      },
+      {
+        name: 'Produto Gamma',
+        desc: 'Tudo liberado.',
+        price: 'R$ 129,90',
+        urgency: 'Últimas entradas deste período.',
+        link: 'https://discord.gg/seulink3'
+      }
+    ];
+
+    const container = document.getElementById('produtos');
+    const ctaLink = document.getElementById('ctaLink');
+
+    products.forEach(p => {
+      const section = document.createElement('section');
+      if (p.anchor) section.classList.add('anchor');
+      section.dataset.link = p.link;
+      section.innerHTML = `
+        <div class="product hidden">
+          <h2>${p.name}</h2>
+          <p>${p.desc}</p>
+          <div class="price">${p.price}</div>
+          <div class="urgency">${p.urgency}</div>
+        </div>
+      `;
+      container.appendChild(section);
+    });
+
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('show');
+          const section = entry.target.closest('section');
+          if (section && section.dataset.link) {
+            ctaLink.href = section.dataset.link;
+          }
+        }
+      });
+    }, { threshold: 0.6 });
+
+    document.querySelectorAll('.hidden').forEach(el => observer.observe(el));
+  </script></body>
+</html>
